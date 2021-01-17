@@ -1,6 +1,7 @@
 <template>
   <div>
-    <px-assets-table v-bind:assets="assets"/>
+    <bounce-loader :loading="isLoading" :color="'#4299e1'" :size="100" />
+    <px-assets-table v-if="isLoading === false" v-bind:assets="assets" />
   </div>
 </template>
 
@@ -15,13 +16,19 @@ export default {
   //generamos la propiedad assets donde guardar la data
   data() {
     return {
+      isLoading: false,
+
       assets: [],
     };
   },
 
   created() {
+    this.isLoading = true;
     //le pasamos los datos a assets una vez los obtenemos
-    api.getAssets().then((assets) => (this.assets = assets));
+    api
+      .getAssets()
+      .then((assets) => (this.assets = assets))
+      .finally(() => (this.isLoading = false));
   },
 };
 </script>
