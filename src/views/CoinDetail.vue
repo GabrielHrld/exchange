@@ -78,7 +78,11 @@
 
       <h3 class="text-xl my-10">Mejores Ofertas de Cambio</h3>
       <table>
-        <tr v-for="m in markets" :key="`${m.exchangeId}-${m.priceUsd}`" class="border-b">
+        <tr
+          v-for="m in markets"
+          :key="`${m.exchangeId}-${m.priceUsd}`"
+          class="border-b"
+        >
           <td>
             <b>{{ m.exchangeId }}</b>
           </td>
@@ -93,7 +97,9 @@
               <slot>Obtener Link</slot>
             </px-button>
 
-            <a v-else class="hover:underline text-green-600" target="_blanck">{{ m.url }}</a>
+            <a v-else class="hover:underline text-blue-600" target="_blanck">{{
+              m.url
+            }}</a>
           </td>
         </tr>
       </table>
@@ -144,37 +150,36 @@ export default {
     this.getCoin();
   },
 
-  
   methods: {
     getWebSite(exchange) {
-      this.$set(exchange, 'isLoading', true)
+      this.$set(exchange, "isLoading", true);
 
       return api
         .getExchange(exchange.exchangeId)
-        .then(res => {
-          this.$set(exchange, 'url', res.exchangeUrl)
+        .then((res) => {
+          this.$set(exchange, "url", res.exchangeUrl);
         })
         .finally(() => {
-          this.$set(exchange, 'isLoading', false)
-        })
+          this.$set(exchange, "isLoading", false);
+        });
     },
 
     getCoin() {
-      const id = this.$route.params.id
-      this.isLoading = true
+      const id = this.$route.params.id;
+      this.isLoading = true;
 
       Promise.all([
         api.getAsset(id),
         api.getAssetHistory(id),
-        api.getMarkets(id)
+        api.getMarkets(id),
       ])
         .then(([asset, history, markets]) => {
-          this.asset = asset
-          this.history = history
-          this.markets = markets
+          this.asset = asset;
+          this.history = history;
+          this.markets = markets;
         })
-        .finally(() => (this.isLoading = false))
-    }
-  }
+        .finally(() => (this.isLoading = false));
+    },
+  },
 };
 </script>
