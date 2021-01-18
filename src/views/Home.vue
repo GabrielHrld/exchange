@@ -17,18 +17,29 @@ export default {
   data() {
     return {
       isLoading: false,
-
+      interval: null,
       assets: [],
     };
   },
 
-  created() {
+  async created() {
     this.isLoading = true;
     //le pasamos los datos a assets una vez los obtenemos
-    api
-      .getAssets()
-      .then((assets) => (this.assets = assets))
-      .finally(() => (this.isLoading = false));
+    this.assets = await api.getAssets();
+    this.isLoading = false;
+    this.refreshFetch();
+  },
+
+  //añadimos la peticion de datos en un setInterval
+  methods: {
+    refreshFetch() {
+      this.interval = setInterval(async () => {
+        this.assets = await api.getAssets();
+      }, 1000);
+    },
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
   },
 };
 </script>
